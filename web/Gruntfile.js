@@ -30,6 +30,12 @@ module.exports = function(grunt) {
       foundation: {
         src: 'bower_components/foundation/js/foundation.min.js',
         dest: 'dist/js/foundation/js/foundation.min.js'
+      },
+      angularjs: {
+        expand: true,
+        cwd: 'bower_components/angular/',
+        src: ['*.js', '*.map'],
+        dest: 'dist/js/angular/'
       }
     },
     concat: {

@@ -1,6 +1,7 @@
 var express = require('express');
 var http = express();
 var compression = require('compression');
+var bodyparser = require('body-parser');
 
 var api = require('./api');
 
@@ -22,6 +23,7 @@ http.use(function(req, res, next) {
     });
 });
 
+registerApiCall('', bodyparser.json());
 registerApiCall('/tournament/:id?/:property?', api.tournament);
 registerApiCall('/match/:id?/:property?', api.match);
 registerApiCall('/user/:id?/:property?', api.user);

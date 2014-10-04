@@ -1,3 +1,5 @@
+var Parse = require('./db/parse');
+
 function raiseInvalidParametersException(res, message) {
     res.status(400);
     res.send(JSON.stringify({
@@ -6,7 +8,7 @@ function raiseInvalidParametersException(res, message) {
     res.end();
 }
 
-function raiseMongoDbError(res, message) {
+function raiseDbError(res, message) {
     res.status(500);
     res.send(JSON.stringify({
         message: message
@@ -32,10 +34,26 @@ exports.tournament = function(req, res, next) {
                     if (req.params.property == 'start') {
                         // Generate the bracket and start the tournament.
                     }
+                    else if (req.params.property == 'add') {
+                        // Add a user to a tournament
+                    }
                 }
                 else
                 {
-                    // Create a new tournament.
+                    try {
+                        if (!tournament.format in ['roundrobin', 'single_elim', 'swiss']) {
+                            throw 'Invalid format.';
+                        }
+                        data = req.body;
+                        tournament = {};
+                        tournament.owner = data.owner;
+                        tournament.name = data.name;
+                        tournament.format = data.format;
+
+                    }
+                    catch (e) {
+                        raiseInvalidParametersException(res, e);
+                    }
                 }
                 break;
             case 'UPDATE':
@@ -58,7 +76,7 @@ exports.tournament = function(req, res, next) {
                 act();
             }
             else if (err) {
-                raiseMongoDbError(res, err);
+                raiseDbError(res, err);
             }
             else {
                 raiseInvalidParametersException(res, 'Tournament does not exist.');
@@ -71,51 +89,94 @@ exports.tournament = function(req, res, next) {
 };
 
 exports.match = function(req, res, next) {
-    switch (req.method) {
-        case 'GET':
-            if (!req.params.id) {
-                raiseInvalidParametersException(res, 'ID field is required.');
+    var match;
+    function act() {
+        switch (req.method) {
+            case 'GET':
+                if (!req.params.id) {
+                    raiseInvalidParametersException(res, 'ID field is required.');
+                }
+                break;
+            case 'POST':
+                if (req.params.id) {
+                    raiseInvalidParametersException(res, 'ID field is not allowed.');
+                }
+                break;
+            case 'UPDATE':
+                if (!req.params.id) {
+                    raiseInvalidParametersException(res, 'ID field is required.');
+                }
+                break;
+            case 'DELETE':
+                if (!req.params.id) {
+                    raiseInvalidParametersException(res, 'ID field is required.');
+                }
+                break;
+        }
+    }
+
+    if (req.params.id) {
+        req.mongo.collection('matches').findOne({_id: req.params.id}, function(err, item) {
+            if (err == null && item) {
+                match = item;
+                act();
             }
-            break;
-        case 'POST':
-            if (req.params.id) {
-                raiseInvalidParametersException(res, 'ID field is not allowed.');
+            else if (err) {
+                raiseDbError(res, err);
             }
-            break;
-        case 'UPDATE':
-            if (!req.params.id) {
-                raiseInvalidParametersException(res, 'ID field is required.');
+            else {
+                raiseInvalidParametersException(res, 'Match does not exist.');
             }
-            break;
-        case 'DELETE':
-            if (!req.params.id) {
-                raiseInvalidParametersException(res, 'ID field is required.');
-            }
-            break;
+        });
+    }
+    else {
+        act();
     }
 };
 
 exports.user = function(req, res, next) {
-    switch (req.method) {
-        case 'GET':
-            if (!req.params.id) {
-                raiseInvalidParametersException(res, 'ID field is required.');
+    var user;
+    function act() {
+        switch (req.method) {
+            case 'GET':
+                if (!req.params.id) {
+                    raiseInvalidParametersException(res, 'ID field is required.');
+                }
+                break;
+            case 'POST':
+                if (req.params.id) {
+                    raiseInvalidParametersException(res, 'ID field is not allowed.');
+                }
+                break;
+            case 'UPDATE':
+                if (!req.params.id) {
+                    raiseInvalidParametersException(res, 'ID field is required.');
+                }
+                break;
+            case 'DELETE':
+                if (!req.params.id) {
+                    raiseInvalidParametersException(res, 'ID field is required.');
+                }
+                break;
+        }
+    }
+    
+    if (req.params.id) {
+        var query = new Parse.Query.get.(req.params.id, {
+            success: function(user) {
+                if (user) {
+                    act();
+                }
+                else {
+                    raiseInvalidParametersException(res, 'User does not exist.');
+                }
+            },
+            error: function(err) {
+                raiseDbError(res, 'Database access error.');
             }
-            break;
-        case 'POST':
-            if (req.params.id) {
-                raiseInvalidParametersException(res, 'ID field is not allowed.');
-            }
-            break;
-        case 'UPDATE':
-            if (!req.params.id) {
-                raiseInvalidParametersException(res, 'ID field is required.');
-            }
-            break;
-        case 'DELETE':
-            if (!req.params.id) {
-                raiseInvalidParametersException(res, 'ID field is required.');
-            }
-            break;
+        });
+    }
+    else {
+        act();
     }
 };

@@ -1,4 +1,5 @@
 var Parse = require('./db/parse');
+var ObjectID = require('mongodb').ObjectID;
 
 function raiseInvalidParametersException(res, message) {
     res.status(400);
@@ -32,7 +33,17 @@ exports.tournament = function(req, res, next) {
                     }
 
                     if (req.params.property == 'start') {
-                        // Generate the bracket and start the tournament.
+                        require('./formats/' + tournament.format).start(tournament, req.mongo, function(err, result){
+                            if (err) {
+                                raiseDbError(res, err);
+                            }
+                            else {
+                                console.log(result);
+                                res.status(200);
+                                res.send({result: 'Tournament start successful.'}});
+                                res.end();
+                            }
+                        });
                     }
                     else if (req.params.property == 'add') {
                         // Add a user to a tournament
@@ -95,7 +106,7 @@ exports.tournament = function(req, res, next) {
     };
 
     if (req.params.id) {
-        req.mongo.collection('tournaments').findOne({_id: req.params.id}, function(err, item) {
+        req.mongo.collection('tournaments').findOne({_id: ObjectID.createFromHexString(req.params.id)}, function(err, item) {
             if (err == null && item) {
                 tournament = item;
                 act();

@@ -73,7 +73,8 @@ module.exports = function(grunt) {
         eqnull: true,
         browser: true,
         globals: {
-          "$": false
+          "$": false,
+          angular: false
         }
       },
       gruntfile: {

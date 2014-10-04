@@ -17,7 +17,7 @@ function raiseDbError(res, message) {
     res.end();
 }
 
-function raiseCustomError(error) {
+function raiseCustomError(res, error) {
     res.status(error.code);
     res.send(JSON.stringify({
         message: error.message
@@ -43,12 +43,12 @@ exports.tournament = function(req, res, next) {
                     if (req.params.property == 'start') {
                         require('./formats/' + tournament.format).start(tournament, req.mongo, function(err, result){
                             if (err) {
-                                raiseCustomError(err);
+                                raiseCustomError(res, err);
                             }
                             else {
                                 console.log(result);
                                 res.status(200);
-                                res.send({result: 'Tournament start successful.'}});
+                                res.send({result: 'Tournament start successful.'});
                                 res.end();
                             }
                         });
@@ -84,7 +84,7 @@ exports.tournament = function(req, res, next) {
                                     }
                                     else {
                                         res.status(200);
-                                        res.send(result[0]._id);
+                                        res.send(result[0]._id.toHexString());
                                         res.end();
                                     }
                                 });

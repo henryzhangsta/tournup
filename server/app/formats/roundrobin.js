@@ -1,11 +1,12 @@
 var async = require('async');
 
 exports.start = function(tournament, db, cb) {
-    if tournament.contestants.length <= 1 {
+    if (tournament.contestants.length <= 1) {
         cb({
             code: 400,
             message: 'Cannot start a tournament in this format with less than 2 contestants.'
         });
+        return;
     }
 
     tournament.matches = {};

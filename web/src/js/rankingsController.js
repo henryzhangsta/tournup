@@ -1,6 +1,6 @@
-var app = angular.module('myApp', ['simplePagination']);
+var myApp = angular.module('myApp', []);
 
-function rankingsController($scope) {
+myApp.rankingsController('rankingsController', function($scope) {
     $scope.ranks = [
 	 	{name: 'Ryan "420 Blaze It" Hon H$U', 
 		score: 53} ,
@@ -14,6 +14,28 @@ function rankingsController($scope) {
 		score: 8},
 		{name: 'Zhang Huadian', 
 		score: 6}
-	];
+		];
     $scope.orderProp = '-score';
-} 
+});
+
+// 'use strict';
+
+// /* Controllers */
+
+// var phonecatApp = angular.module('phonecatApp', []);
+
+// phonecatApp.controller('PhoneListCtrl', function($scope) {
+//   $scope.phones = [
+//     {'name': 'Nexus S',
+//      'snippet': 'Fast just got faster with Nexus S.',
+//      'age': 1},
+//     {'name': 'Motorola XOOM™ with Wi-Fi',
+//      'snippet': 'The Next, Next Generation tablet.',
+//      'age': 2},
+//     {'name': 'MOTOROLA XOOM™',
+//      'snippet': 'The Next, Next Generation tablet.',
+//      'age': 3}
+//   ];
+
+//   $scope.orderProp = 'age';
+// });

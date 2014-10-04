@@ -1,0 +1,75 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        tools:context="mipsmob.tournup.activities.TournamentInfoActivity">
+
+        <TextView
+            android:id="@+id/tourny_name"
+            android:text="Cal Smash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="60sp" />
+
+        <TextView
+            android:id="@+id/tourny_time"
+            android:text="Time: 1:00P"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textSize="40sp" />
+
+        <TextView
+            android:id="@+id/tourny_loc"
+            android:text="Loc: Memorial Stadium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textSize="40sp" />
+
+        <TextView
+            android:id="@+id/tourny_host"
+            android:text="Host: Huadian"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textSize="40sp" />
+
+        <TextView
+            android:id="@+id/tourny_format"
+            android:text="Format: Round Robin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textSize="40sp" />
+
+        <TextView
+            android:id="@+id/tourny_people"
+            android:text="People: 6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textSize="40sp" />
+
+        <ImageButton
+            android:id="@+id/join"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp"
+            android:contentDescription="@string/content_desc"
+            android:background="@drawable/join_button" />
+
+
+    </LinearLayout>
+
+</ScrollView>

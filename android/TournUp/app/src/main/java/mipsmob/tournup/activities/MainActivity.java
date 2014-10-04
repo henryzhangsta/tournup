@@ -15,12 +15,7 @@ import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 
-import java.util.Date;
-
 import mipsmob.tournup.R;
-import mipsmob.tournup.controllers.TournamentController;
-import mipsmob.tournup.models.Tournament;
-import mipsmob.tournup.utilities.Callback;
 
 public class MainActivity extends BaseActivity {
 
@@ -55,19 +50,6 @@ public class MainActivity extends BaseActivity {
                         }).executeAsync();
 
                     } else {
-                        TournamentController.getInstance(MainActivity.this).createTournament(new Tournament("Smash bros", "roundrobin", new Date(), "Berkeley", parseUser, "5.00", true, 6), new Callback() {
-                            @Override
-                            public void onDataRetrieved(Object data) {
-                                System.out.println((String) data);
-                            }
-
-                            @Override
-                            public void onRetrievalFailed() {
-
-                            }
-                        });
-
-
                         Intent i = new Intent(getBaseContext(), TitleActivity.class);
                         startActivity(i);
                         finish();

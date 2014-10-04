@@ -51,7 +51,7 @@ module.exports = function(grunt) {
       },
       dist: {
         files: {
-          '.tmp/js/<%= pkg.name %>.js': ['src/js/**/*']
+          '.tmp/js/<%= pkg.name %>.js': ['src/js/**/*.js']
         }
       }
     },

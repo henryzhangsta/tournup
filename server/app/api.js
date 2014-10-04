@@ -17,6 +17,14 @@ function raiseDbError(res, message) {
     res.end();
 }
 
+function raiseCustomError(error) {
+    res.status(error.code);
+    res.send(JSON.stringify({
+        message: error.message
+    }));
+    res.end();
+}
+
 exports.tournament = function(req, res, next) {
     var tournament;
     function act() {
@@ -35,7 +43,7 @@ exports.tournament = function(req, res, next) {
                     if (req.params.property == 'start') {
                         require('./formats/' + tournament.format).start(tournament, req.mongo, function(err, result){
                             if (err) {
-                                raiseDbError(res, err);
+                                raiseCustomError(err);
                             }
                             else {
                                 console.log(result);

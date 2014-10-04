@@ -1,6 +1,7 @@
+var Constants = require('./constants');
 var MongoClient = require('mongodb').MongoClient;
 var db;
-MongoClient.connect('mongodb://tournup:tournup@ds048487.mongolab.com:48487/tournup', function(err, db) {
+MongoClient.connect(Constants.MONGO_DATABASE_URL, function(err, db) {
     console.assert(err == null);
     console.assert(db != null);
     console.log('Mongo connection open');

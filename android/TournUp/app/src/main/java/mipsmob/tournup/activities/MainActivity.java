@@ -20,7 +20,7 @@ public class MainActivity extends BaseActivity {
         Parse.initialize(this, "22d6Ninlt3Gcjv4fXMljncmHsboYlnCx5KkMIWt8", "2udREdDAjBRKrOcAEQAEJWvqBYDaDDVzjmPHOlbA");
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-//        if (sharedPref.
+        if (sharedPref.
     }
 
 }

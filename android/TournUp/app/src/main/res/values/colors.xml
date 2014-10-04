@@ -5,5 +5,8 @@
     <color name="green">#87FF8F</color>
     <color name="purple">#7F1FBF</color>
     <color name="orange">#FFA800</color>
+    <color name="red">#E90000</color>
+    <color name="dark_green">#18ca00</color>
+    <color name="yellow">#ffd800</color>
 
 </resources>

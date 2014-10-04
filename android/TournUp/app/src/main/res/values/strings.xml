@@ -12,5 +12,7 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="app_id">358751534281138</string>
+    <string name="logging_in">Logging in…</string>
+    <string name="title_activity_tournament_info">Join</string>
 
 </resources>

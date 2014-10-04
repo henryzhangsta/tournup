@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">TournUp</string>
+    <string name="content_desc">Image</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_host">Host</string>
+    <string name="title_activity_join">Join</string>
+    <string name="title_activity_verify">Verify</string>
+    <string name="title_activity_match">Current Match</string>
+    <string name="current_opponent">Your current opponent is</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="hello_world">Hello world!</string>
+
+</resources>

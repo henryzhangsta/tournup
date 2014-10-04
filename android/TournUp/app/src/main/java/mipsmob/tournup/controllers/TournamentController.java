@@ -64,14 +64,23 @@ public class TournamentController {
                 t.contestants = new ArrayList<Object>();
 
                 String jsonString = new Gson().toJson(t);
-                final String response = HttpRequest.post(BASE_URL + "tournament").header("Content-Type", "application/json").send(jsonString).body();
+                try {
+                    final String response = HttpRequest.post(BASE_URL + "tournament").header("Content-Type", "application/json").send(jsonString).body();
 
-                ((Activity) context).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        callback.onDataRetrieved(response);
-                    }
-                });
+                    ((Activity) context).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onDataRetrieved(response);
+                        }
+                    });
+                } catch(Exception e) {
+                    ((Activity) context).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onRetrievalFailed();
+                        }
+                    });
+                }
             }
 
         }.start();

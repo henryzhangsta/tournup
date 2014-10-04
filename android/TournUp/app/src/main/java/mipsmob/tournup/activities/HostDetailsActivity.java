@@ -1,5 +1,6 @@
 package mipsmob.tournup.activities;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -79,11 +80,15 @@ public class HostDetailsActivity extends BaseActivity {
                         public void onDataRetrieved(Object data) {
                             tournament.setId((String) data);
                             Toast.makeText(getBaseContext(), "Tournament successfully created!", Toast.LENGTH_SHORT).show();
+
+                            Intent i = new Intent(getBaseContext(), WaitingScreenActivity.class);
+                            startActivity(i);
                             finish();
                         }
 
                         @Override
                         public void onRetrievalFailed() {
+                            Toast.makeText(getBaseContext(), "Something went wrong, please try again", Toast.LENGTH_SHORT).show();
                         }
                     });
                 } catch (Exception e) {

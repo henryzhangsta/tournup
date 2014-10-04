@@ -53,6 +53,15 @@
                 android:textSize="32sp"
                 android:background="@drawable/edit_text_background" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:gravity="end"
+                android:textSize="32sp"
+                android:textColor="@android:color/transparent"
+                android:text="@string/percent" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -121,6 +130,15 @@
                 android:inputType="number"
                 android:textSize="32sp"
                 android:background="@drawable/edit_text_background" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:gravity="end"
+                android:textSize="32sp"
+                android:textColor="@android:color/transparent"
+                android:text="@string/percent" />
 
         </LinearLayout>
 

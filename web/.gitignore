@@ -2,6 +2,7 @@ dist/*
 .tmp
 .sass-cache
 .DS_Store
+bower_components
 
 # Logs
 logs

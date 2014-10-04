@@ -1,3 +1,4 @@
+
 var myApp = angular.module('myApp', []);
 
 myApp.rankingsController('rankingsController', function($scope) {

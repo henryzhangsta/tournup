@@ -4,6 +4,7 @@
   "private": "true",
   "dependencies": {
     "foundation": "zurb/bower-foundation",
-    "angular": "~1.2.26"
+    "angular": "~1.2.26",
+    "angular-datatables": "~0.2.0"
   }
 }

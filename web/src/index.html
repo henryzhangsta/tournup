@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Foundation</title>
     <link rel="stylesheet" href="css/app.css" />
-    <script src="js/modernizr/modernizr.js"></script>
-    <title>Foundation</title>
-    <link rel="stylesheet" href="css/app.css" />
     <link rel="stylesheet" href="css/style.css" />
     <script src="js/modernizr/modernizr.js"></script>
 
@@ -51,13 +48,13 @@
 
     <script src="js/jquery/dist/jquery.min.js"></script>
     <script src="js/foundation/js/foundation.min.js"></script>
-    <script src="js/TournUp.min.js"></script>
-    <script src="js/rankingsController.js"></script>
     <script src="js/angular/angular.min.js"></script>
+    <script src="js/angular-datatables/angular-datatables.min.js"></script>
+    <script src="js/TournUp.min.js"></script>
     <script>
       $(document).ready(function() {
-        $('#rankings').dataTable();
-    } );
+        $(document).foundation();
+      } );
     </script>
   </body>
 </html>

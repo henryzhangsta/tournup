@@ -12,9 +12,9 @@ function registerApiCall(path, callback) {
 
 http.use(compression());
 
-registerApiCall('/tournament/:id?', api.tournament);
-registerApiCall('/match/:id?', api.match);
-registerApiCall('/user/:id?', api.user);
+registerApiCall('/tournament/:id?/:property?', api.tournament);
+registerApiCall('/match/:id?/:property?', api.match);
+registerApiCall('/user/:id?/:property?', api.user);
 
 http.use(function(req, res, next) {
     res.status(400);

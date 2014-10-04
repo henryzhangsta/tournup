@@ -1,0 +1,16 @@
+{
+  "name": "TournUp",
+  "version": "0.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mip$ Mob",
+  "license": "ISC",
+  "dependencies": {
+    "compression": "^1.1.0",
+    "express": "^4.9.5",
+    "ws": "^0.4.32"
+  }
+}

@@ -17,6 +17,7 @@
     <string name="title_activity_host_details">Host</string>
     <string name="entry_fee">Entry Fee:</string>
     <string name="prize_percentage">Prize %:</string>
+    <string name="max_people">Max Participants: </string>
     <string name="location">Location</string>
     <string name="tournament_name">Tournament Name</string>
     <string name="money">$</string>

@@ -34,11 +34,13 @@ public class HostDetailsActivity extends BaseActivity {
 
         TextView entryFeeLabel = (TextView) findViewById(R.id.entry_fee_label);
         TextView prizeLabel = (TextView) findViewById(R.id.prize_label);
+        TextView maxPeopleLabel = (TextView) findViewById(R.id.max_people_label);
         TextView locationLabel = (TextView) findViewById(R.id.location_label);
         TextView nameLabel = (TextView) findViewById(R.id.name_label);
 
         final EditText entryFee = (EditText) findViewById(R.id.cost);
         final EditText prize = (EditText) findViewById(R.id.prize_percentage);
+        final EditText maxPeople = (EditText) findViewById(R.id.max_people);
         final EditText location = (EditText) findViewById(R.id.location);
         final EditText name = (EditText) findViewById(R.id.name);
 
@@ -48,38 +50,45 @@ public class HostDetailsActivity extends BaseActivity {
 
         entryFeeLabel.setTypeface(typeface);
         prizeLabel.setTypeface(typeface);
+        maxPeopleLabel.setTypeface(typeface);
         locationLabel.setTypeface(typeface);
         nameLabel.setTypeface(typeface);
         entryFee.setTypeface(typeface);
         prize.setTypeface(typeface);
+        maxPeople.setTypeface(typeface);
         location.setTypeface(typeface);
         name.setTypeface(typeface);
 
         createTournyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Tournament tournament = new Tournament(
-                        name.getText().toString(),
-                        format,
-                        new Date(),
-                        location.getText().toString(),
-                        ParseUser.getCurrentUser(),
-                        entryFee.getText().toString(),
-                        Integer.parseInt(entryFee.getText().toString()) != 0,
-                        20
-                );
+                try {
+                    final Tournament tournament = new Tournament(
+                            name.getText().toString(),
+                            format,
+                            new Date(),
+                            location.getText().toString(),
+                            ParseUser.getCurrentUser(),
+                            entryFee.getText().toString(),
+                            Integer.parseInt(entryFee.getText().toString()) != 0,
+                            Integer.parseInt(maxPeople.getText().toString())
+                    );
 
-                TournamentController.getInstance(HostDetailsActivity.this).createTournament(tournament, new Callback() {
-                    @Override
-                    public void onDataRetrieved(Object data) {
-                        tournament.setId((String) data);
-                        Toast.makeText(getBaseContext(), "Tournament successfully created!", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
+                    TournamentController.getInstance(HostDetailsActivity.this).createTournament(tournament, new Callback() {
+                        @Override
+                        public void onDataRetrieved(Object data) {
+                            tournament.setId((String) data);
+                            Toast.makeText(getBaseContext(), "Tournament successfully created!", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
 
-                    @Override
-                    public void onRetrievalFailed() {}
-                });
+                        @Override
+                        public void onRetrievalFailed() {
+                        }
+                    });
+                } catch (Exception e) {
+                    Toast.makeText(getBaseContext(), "Please fill out all fields correctly", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

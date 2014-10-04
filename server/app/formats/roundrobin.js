@@ -1,10 +1,16 @@
+var async = require('async');
 
 exports.start = function(tournament, db) {
-    matches = [];
+    tournament.matches = {};
+    tournament.matches.waiting = [];
+    tournament.matches.playing = [];
+    tournament.matches.finished = [];
+    
     for (var i = 0; i < tournament.contestants.length; ++i) {
         for (var j = i + 1; j < tournament.contestants.length; ++j) {
             matches.push({
-                players: [tournament.contestants[i].id, tournament.contestants[j].id],
+                tournament_id: tournament._id,
+                players: [tournament.contestants[i]._id, tournament.contestants[j]._id],
                 state: 'pending',
                 result: null,
                 winner: null
@@ -12,9 +18,10 @@ exports.start = function(tournament, db) {
         }
     }
 
+
     contestants = {};
     for (var i = 0; i < tournament.contestants.length; ++i) {
-        contestants[tournament.contestants[i].id] = true;
+        contestants[tournament.contestants[i]._id] = true;
     }
 
     for (var i = 0; i < matches.length; ++i) {
@@ -33,6 +40,22 @@ exports.start = function(tournament, db) {
     }
 }
 
+exports.matchStart = function(match, db) {
+
+}
+
 exports.matchEnd = function(match, db) {
+
+}
+
+exports.roundStart = function(tournament, db) {
+
+}
+
+exports.roundEnd = function(tournament, db) {
+
+}
+
+exports.end = function(tournament, db) {
 
 }

@@ -41,17 +41,42 @@ exports.tournament = function(req, res, next) {
                 else
                 {
                     try {
-                        if (!tournament.format in ['roundrobin', 'single_elim', 'swiss']) {
+                        data = req.body;
+                        if (!data.format in ['roundrobin', 'single_elim', 'swiss']) {
                             throw 'Invalid format.';
                         }
-                        data = req.body;
-                        tournament = {};
-                        tournament.owner = data.owner;
-                        tournament.name = data.name;
-                        tournament.format = data.format;
 
+                        (new Parse.Query(Parse.User)).get(data.owner, {
+                            success: function(obj) {
+                                tournament = {};
+                                tournament.owner = data.owner;
+                                tournament.name = data.name;
+                                tournament.format = data.format;
+                                tournament.time = data.time;
+                                tournament.location = data.location;
+                                tournament.paid = data.paid;
+                                tournament.max_contestants = data.max_contestants;
+                                tournament.entry_cost = data.entry_cost;
+                                tournament.contestants = [];
+
+                                req.mongo.collection('tournaments').insert(tournament, function(err, result){
+                                    if (err) {
+                                        raiseDbError(res, err);
+                                    }
+                                    else {
+                                        res.status(200);
+                                        res.send(result[0]._id);
+                                        res.end();
+                                    }
+                                });
+                            },
+                            error: function(err) {
+                                raiseDbError(res, 'Owner does not exist.');
+                            }
+                        });
                     }
                     catch (e) {
+                        console.log(e);
                         raiseInvalidParametersException(res, e);
                     }
                 }
@@ -162,17 +187,13 @@ exports.user = function(req, res, next) {
     }
     
     if (req.params.id) {
-        var query = new Parse.Query.get.(req.params.id, {
-            success: function(user) {
-                if (user) {
-                    act();
-                }
-                else {
-                    raiseInvalidParametersException(res, 'User does not exist.');
-                }
+        (new Parse.Query(Parse.User)).get(req.params.id, {
+            success: function(obj) {
+                user = obj;
+                act();
             },
             error: function(err) {
-                raiseDbError(res, 'Database access error.');
+                raiseDbError(res, 'User does not exist.');
             }
         });
     }

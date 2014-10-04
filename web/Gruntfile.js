@@ -36,6 +36,12 @@ module.exports = function(grunt) {
         cwd: 'bower_components/angular/',
         src: ['*.js', '*.map'],
         dest: 'dist/js/angular/'
+      },
+      datatables: {
+        expand: true,
+        cwd: 'bower_components/angular-datatables/dist',
+        src: ['*'],
+        dest: 'dist/js/angular-datatables/'
       }
     },
     concat: {

@@ -1,5 +1,3 @@
-var app = angular.module('myApp', ['simplePagination']);
-
 function rankingsController($scope) {
     $scope.ranks = [
 	 	{name: 'Ryan "420 Blaze It" Hon H$U', 

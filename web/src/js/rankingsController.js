@@ -1,7 +1,7 @@
 
 var myApp = angular.module('myApp', []);
 
-myApp.rankingsController('rankingsController', function($scope) {
+myApp.controller('rankingsController', function($scope) {
     $scope.ranks = [
 	 	{name: 'Ryan "420 Blaze It" Hon H$U', 
 		score: 53} ,

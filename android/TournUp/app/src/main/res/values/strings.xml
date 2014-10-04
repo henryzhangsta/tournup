@@ -11,5 +11,6 @@
     <string name="current_opponent">Your current opponent is</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="app_id">358751534281138</string>
 
 </resources>

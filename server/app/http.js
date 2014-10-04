@@ -11,6 +11,16 @@ function registerApiCall(path, callback) {
 };
 
 http.use(compression());
+http.use(function(req, res, next) {
+    require('./db/mongo')().then(function(db){
+        req.mongo = db;
+        next();
+    }, function(err) {
+        res.status(500);
+        res.send(JSON.stringify({message: 'Database connection failure.'}));
+        res.end();
+    });
+});
 
 registerApiCall('/tournament/:id?/:property?', api.tournament);
 registerApiCall('/match/:id?/:property?', api.match);

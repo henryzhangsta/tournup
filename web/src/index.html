@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en"  ng-app="">
+<html class="no-js" lang="en"  ng-app="myApp">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,11 +9,15 @@
     <script src="js/modernizr/modernizr.js"></script>
 
   </head>
-  <body>
-
-    <div ng-include="'navbar.html'"></div>
-
-  <div ng-app="" id="scores" ng-controller="rankingsController">
+  <body ng-controller="rankingsController">
+  <nav class="top-bar" data-topbar role="navigation"> 
+    <ul class="title-area"> 
+      <li class="name"> 
+      <h1> &nbsp; &nbsp;<img src="img/tournup.png" alt="TournUp" height="80px" width="180px">  </h1> 
+      </li> <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone --> 
+    </ul> 
+  </nav>
+  <div id="scores" >
     
     <h1>Rankings</h1>
     <div id="search"> 
@@ -44,13 +48,8 @@
 
     <script src="js/jquery/dist/jquery.min.js"></script>
     <script src="js/foundation/js/foundation.min.js"></script>
-    <script src="js/angular/angular.min.js"></script>
-    <script src="js/angular-datatables/angular-datatables.min.js"></script>
     <script src="js/TournUp.min.js"></script>
-    <script>
-      $(document).ready(function() {
-        $(document).foundation();
-      } );
-    </script>
+    <script src="js/angular/angular.js"></script>
+    <script src="js/rankingsController.js"></script>
   </body>
 </html>

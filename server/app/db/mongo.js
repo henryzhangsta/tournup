@@ -16,7 +16,6 @@ function dbConnect(resolve, reject) {
         });
     }
     else {
-        console.log('use cached');
         resolve(db);
     }
 }

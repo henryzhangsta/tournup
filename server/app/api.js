@@ -33,6 +33,9 @@ exports.tournament = function(req, res, next) {
                 if (!req.params.id) {
                     raiseInvalidParametersException(res, 'ID field is required.');
                 }
+                res.status(200);
+                res.send(JSON.stringify(tournament));
+                res.end();
                 break;
             case 'POST':
                 if (req.params.id) {

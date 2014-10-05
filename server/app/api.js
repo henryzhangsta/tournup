@@ -208,7 +208,7 @@ exports.match = function(req, res, next) {
                     raiseInvalidParametersException(res, 'Request is missing one or more required parameters');
                     return;
                 }
-                if (data.result == 'draw' || match.players.filter(function(item) {return item == winner}).length == 1) {
+                if (data.result == 'draw' || match.players.filter(function(item) {return item == data.winner}).length == 1) {
                     raiseInvalidParametersException(res, 'Invalid result.');
                     return;
                 }

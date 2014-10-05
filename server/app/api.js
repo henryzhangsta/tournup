@@ -199,7 +199,7 @@ exports.match = function(req, res, next) {
                     raiseInvalidParametersException(res, 'ID field is not allowed.');
                 }
                 break;
-            case 'UPDATE':
+            case 'PUT':
                 if (!req.params.id) {
                     raiseInvalidParametersException(res, 'ID field is required.');
                 }

@@ -62,3 +62,16 @@ exports.sendMatchNotification = function(match, callback) {
         }
     });
 };
+
+exports.sendNotification = function(user, message, callback) {
+    Parse.Push.send({
+        channels: ['user_' + user],
+        data: {
+            alert: message
+        }
+    }).then(function(result) {
+        callback(null);
+    }, function(error) {
+        callback(error);
+    });
+}

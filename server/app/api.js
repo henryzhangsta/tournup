@@ -1,6 +1,8 @@
 var Parse = require('./db/parse');
 var ObjectID = require('mongodb').ObjectID;
 var async = require('async');
+var request = require('request');
+var push = require('./push/push');
 
 function raiseInvalidParametersException(res, message) {
     res.status(400);
@@ -427,10 +429,50 @@ exports.payment = function(req, res, next) {
                 }
             });
             break;
-        case 'UPDATE':
+        case 'PUT':
             if (!req.params.id) {
                 raiseInvalidParametersException(res, 'ID field is required.');
             }
+            if (req.params.id.length < 12) {
+                raiseInvalidParametersException(res, 'Invalid ID.');
+                return;
+            }
+            req.mongo.collection('tournaments').findOne({_id: ObjectID.createFromHexString(req.params.id)}, function(err, item) {
+                if (err == null && item) {
+                    tournament = item;
+                    results = tournament.contestants.sort(function(a, b) {
+                        return b.scoring.score < a.scoring.score;
+                    });
+
+                    var num_payout = Math.min(results.length, 3);
+                    results = results.slice(0, num_payout);
+                    async.each(results, function(item, callback) {
+                        request.post('https://sandbox-api.venmo.com/v1/payments?access_token=' + 'TOKEN' + '&user_id=145434160922624933&amount=0.1&note=Prize', function(error, response, body) {
+                            if (error) {
+                                callback(error);
+                            }
+                            else {
+                                push.sendNotification(item.id, 'You have just been paid!', callback);
+                            }
+                        });
+                    }, function(error) {
+                        if (error) {
+                            raiseDbError(res, error);
+                        }
+                        else {
+                            res.status(200);
+                            res.send(JSON.stringify({message: 'Successfully paid.'}));
+                            res.end();
+                        }
+                    });
+                }
+                else if (err) {
+                    raiseDbError(res, err);
+                }
+                else {
+                    raiseInvalidParametersException(res, 'Tournament does not exist.');
+                }
+            });
             break;
         case 'DELETE':
             if (!req.params.id) {

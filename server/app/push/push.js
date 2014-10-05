@@ -52,10 +52,10 @@ exports.sendMatchNotification = function(match, callback) {
             }
         });
     }, function(error) {
-        if (err) {
+        if (error) {
             cb({
                 code: 500,
-                message: err
+                message: error
             });
         }
         else {

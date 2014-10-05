@@ -5,8 +5,11 @@ function generatePairing(round, tournament, state) {
     matches = [];
 
     var contestants = tournament.contestants.slice();
+    console.log(contestants);
     var row1 = contestants.slice(0, contestants.length / 2);
     var row2 = contestants.slice(contestants.length / 2);
+    console.log(row1);
+    console.log(row2);
     if (row2.length != row1.length) {
         row2.push(null);
     }
@@ -66,7 +69,7 @@ exports.start = function(tournament, db, cb) {
             });
         }
         else {
-            roundStart(tournament, db, cb);
+            exports.roundStart(tournament, db, cb);
         }
     });
 }

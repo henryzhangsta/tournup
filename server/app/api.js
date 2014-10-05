@@ -64,6 +64,11 @@ exports.tournament = function(req, res, next) {
                         data = req.body;
                         (new Parse.Query(Parse.User)).get(data.user, {
                             success: function(obj) {
+                                if (tournament.contestants.filter(function(item) { return item.id == data.user; }).length > 0) {
+                                    raiseInvalidParametersException(res, 'User is already in this tournament.');
+                                    return;
+                                }
+                                
                                 if (tournament.paid) {
                                     tournament.contestants.push({
                                         id: data.user,

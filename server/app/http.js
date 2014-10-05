@@ -30,6 +30,7 @@ registerApiCall('/match/:id?/:property?', api.match);
 registerApiCall('/user/:id?/:property?', api.user);
 registerApiCall('/payment/:id?', api.payment);
 registerApiCall('/venmo/webhook', venmo.webhook);
+registerApiCall('/venmo/oauth', venmo.oauth);
 
 http.use(function(req, res, next) {
     res.status(400);

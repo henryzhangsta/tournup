@@ -155,6 +155,9 @@ exports.tournament = function(req, res, next) {
     };
 
     if (req.params.id) {
+        if (req.params.id.length < 12) {
+            raiseInvalidParametersException(res, 'Invalid ID.');
+        }
         req.mongo.collection('tournaments').findOne({_id: ObjectID.createFromHexString(req.params.id)}, function(err, item) {
             if (err == null && item) {
                 tournament = item;
@@ -289,20 +292,42 @@ exports.payment = function(req, res, next) {
                                     raiseDbError(res, err);
                                 }
                                 else {
-                                    if (transaction.confirmed) {
+                                    if (transaction && transaction.confirmed) {
                                         for (var i in tournament.contestants) {
                                             if (tournament.contestants[i].id == data.user_id) {
                                                 tournament.contestants[i].paid = true;
                                                 tournament.contestants[i].status = 'confirmed';
                                                 tournament.contestants[i].transaction = transaction._id;
                                                 
-                                                res.status(200);
-                                                res.send(res, JSON.stringify({
-                                                    transaction_id: transaction._id,
-                                                    status: 'confirmed'
-                                                }));
+                                                req.mongo.collection('tournaments').save(tournament, function (err, result) {
+                                                    if (err) {
+                                                        raiseDbError(res, err);
+                                                        return;
+                                                    }
+                                                    res.status(200);
+                                                    res.send(res, JSON.stringify({
+                                                        transaction_id: transaction._id,
+                                                        status: 'confirmed'
+                                                    }));
+                                                    res.end(); 
+                                                });
+                                                return;
                                             }
                                         }
+                                    }
+                                    else if (transaction) {
+                                        raiseDbError(res, 'Payment in inconsistent state. Contact support.');
+                                    }
+                                    else {
+                                        req.mongo.collection('transactions').insert({
+                                            user_id: data.user_id,
+                                            payment_id: data.payment_id,
+                                            tournament_id: data.tournament_id,
+                                            confirmed: false
+                                        }, function(err, result) {
+                                            res.status(200);
+                                            res.send(data.payment_id);
+                                        });
                                     }
                                 }
                             });

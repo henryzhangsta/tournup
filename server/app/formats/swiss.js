@@ -56,7 +56,7 @@ exports.start = function(tournament, db, cb) {
     tournament.matches = {};
     tournament.matches.playing = [];
     tournament.matches.finished = [];
-    tournament.num_rounds = Math.ceil(Math.log2(tournament.contestants.length));
+    tournament.num_rounds = Math.ceil(Math.log(tournament.contestants.length) / Math.log(2));
     tournament.round = 1;
 
     db.collection('tournaments').save(tournament, function(err, reuslt) {

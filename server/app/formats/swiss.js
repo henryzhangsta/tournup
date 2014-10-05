@@ -240,7 +240,20 @@ exports.end = function(tournament, db, cb) {
             });
         }   
         else {
-            cb();
+            Parse.Push.send({
+                channels: ['tournament_' + tournament._id],
+                data: {
+                    alert: 'Tournament is complete. Results are ready!',
+                    tournament_id: tournament._id
+                }
+            }).then(function(result) {
+                cb(null, result);
+            }, function(error) {
+                cb({
+                    code: 500,
+                    message: error
+                });
+            });
         }
     });
 }

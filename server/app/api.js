@@ -247,7 +247,7 @@ exports.match = function(req, res, next) {
             raiseInvalidParametersException(res, 'Invalid ID.');
             return;
         }
-        req.mongo.collection('matches').findOne({_id: req.params.id}, function(err, item) {
+        req.mongo.collection('matches').findOne({_id: ObjectID.createFromHexString(req.params.id)}, function(err, item) {
             if (err == null && item) {
                 match = item;
                 act();

@@ -34,9 +34,26 @@ exports.tournament = function(req, res, next) {
                     raiseInvalidParametersException(res, 'ID field is required.');
                 }
 
-                res.status(200);
-                res.send(JSON.stringify(tournament));
-                res.end();
+                if (req.params.property == 'results') {
+                    var results = [];
+                    for (var i in tournament.contestants) {
+                        results.push({
+                            id: tournament.contestants[i].id,
+                            score: tournament.contestants[id].scoring.score,
+                            wins: tournament.contestants[id].scoring.wins,
+                            draws: tournament.contestants[id].scoring.draws,
+                            losses: tournament.contestants[id].scoring.losses
+                        });
+                    }
+                    res.status(200);
+                    res.send(JSON.stringify(results));
+                    res.end();
+                }
+                else {
+                    res.status(200);
+                    res.send(JSON.stringify(tournament));
+                    res.end();
+                }
                 break;
             case 'POST':
                 if (req.params.id) {

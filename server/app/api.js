@@ -39,10 +39,10 @@ exports.tournament = function(req, res, next) {
                     for (var i in tournament.contestants) {
                         results.push({
                             id: tournament.contestants[i].id,
-                            score: tournament.contestants[id].scoring.score,
-                            wins: tournament.contestants[id].scoring.wins,
-                            draws: tournament.contestants[id].scoring.draws,
-                            losses: tournament.contestants[id].scoring.losses
+                            score: tournament.contestants[i].scoring.score,
+                            wins: tournament.contestants[i].scoring.wins,
+                            draws: tournament.contestants[i].scoring.draws,
+                            losses: tournament.contestants[i].scoring.losses
                         });
                     }
                     res.status(200);

@@ -235,7 +235,7 @@ exports.end = function(tournament, db, cb) {
         }   
         else {
             Parse.Push.send({
-                channels: ['tournament_' + tournament._id],
+                channels: ['tournament_' + tournament._id, 'host_' + tournament._id],
                 data: {
                     alert: 'Tournament is complete. Results are ready!',
                     tournament_id: tournament._id

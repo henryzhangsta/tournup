@@ -145,38 +145,7 @@ exports.roundStart = function(tournament, db, cb) {
             }
             else {
                 if (item.players.length > 1) {
-                    async.each(item.players, function(player, callb) {
-                        var request = {
-                            channels: ['user_' + player],
-                            data: {
-                                match: item._id
-                            }
-                        };
-                        console.log(request);
-                        if (player == item.players[0]) {
-                            request.data.alert = 'You are playing ' + item.players[1] + ' next!';
-                            request.data.opponent = item.players[1];
-                        }
-                        else {
-                            request.data.alert = 'You are playing ' + item.players[0] + ' next!';
-                            request.data.opponent = item.players[0];
-                        }
-                        Parse.Push.send(request).then(function() {
-                            callb(null);
-                        }, function (error) {
-                            callb(error);
-                        });
-                    }, function(error) {
-                        if (err) {
-                            cb({
-                                code: 500,
-                                message: err
-                            });
-                        }   
-                        else {
-                            callback(null, item._id);
-                        }
-                    });
+                    push.sendMatchNotification(item, callback);
                 }
                 else {
                     bye = item;

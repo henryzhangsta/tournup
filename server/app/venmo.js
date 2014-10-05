@@ -35,7 +35,7 @@ exports.oauth = function(req, res, next) {
                 }
                 else {
                     res.status(200);
-                    res.send(JSON.stringify(venmo_id: body._id));
+                    res.send(JSON.stringify({venmo_id: body._id}));
                     res.end();
                 }
             });

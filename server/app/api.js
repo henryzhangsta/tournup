@@ -41,6 +41,9 @@ exports.tournament = function(req, res, next) {
                     }
 
                     if (req.params.property == 'start') {
+                        tournament.contestants = tournament.contestants.filter(function isConfirmed(contestant){
+                            return contestant.status == 'confirmed';
+                        });
                         require('./formats/' + tournament.format).start(tournament, req.mongo, function(err, result){
                             if (err) {
                                 raiseCustomError(res, err);
@@ -54,7 +57,42 @@ exports.tournament = function(req, res, next) {
                         });
                     }
                     else if (req.params.property == 'add') {
-                        // Add a user to a tournament
+                        data = req.body;
+                        (new Parse.Query(Parse.User)).get(data.owner, {
+                            success: function(obj) {
+                                if (tournament.paid) {
+                                    tournament.contestants.push({
+                                        _id: ObjectID().createFromHexString(data.owner),
+                                        registration_time: (new Date()).toJSON(),
+                                        paid: '0.00',
+                                        transaction: null,
+                                        status: 'pending'
+                                    });
+                                }
+                                else {
+                                    tournament.contestants.push({
+                                        _id: ObjectID().createFromHexString(data.owner),
+                                        registration_time: (new Date()).toJSON(),
+                                        paid: '0.00',
+                                        transaction: null,
+                                        status: 'confirmed'
+                                    });
+                                }
+                                req.mongo.collection('tournaments').save(tournament, function(err, result){
+                                    if (err) {
+                                        raiseDbError(res, err);
+                                    }
+                                    else {
+                                        res.status(200);
+                                        res.send({message: 'Adding '});
+                                        res.end();
+                                    }
+                                });
+                            },
+                            error: function(err) {
+                                raiseDbError(res, 'User does not exist.');
+                            }
+                        });
                     }
                 }
                 else
@@ -220,3 +258,28 @@ exports.user = function(req, res, next) {
         act();
     }
 };
+
+exports.payment = function(req, res, next) {
+    switch (req.method) {
+        case 'GET':
+            if (!req.params.id) {
+                raiseInvalidParametersException(res, 'ID field is required.');
+            }
+            break;
+        case 'POST':
+            if (req.params.id) {
+                raiseInvalidParametersException(res, 'ID field is not allowed.');
+            }
+            break;
+        case 'UPDATE':
+            if (!req.params.id) {
+                raiseInvalidParametersException(res, 'ID field is required.');
+            }
+            break;
+        case 'DELETE':
+            if (!req.params.id) {
+                raiseInvalidParametersException(res, 'ID field is required.');
+            }
+            break;
+    }
+}

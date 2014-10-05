@@ -4,6 +4,7 @@ var compression = require('compression');
 var bodyparser = require('body-parser');
 
 var api = require('./api');
+var venmo = require('./venmo');
 
 var API_DIR = '/api';
 
@@ -27,6 +28,8 @@ registerApiCall('', bodyparser.json());
 registerApiCall('/tournament/:id?/:property?', api.tournament);
 registerApiCall('/match/:id?/:property?', api.match);
 registerApiCall('/user/:id?/:property?', api.user);
+registerApiCall('/payment/:id?', api.payment);
+registerApiCall('/venmo/webhook', venmo.webhook);
 
 http.use(function(req, res, next) {
     res.status(400);

@@ -1,15 +1,14 @@
 var async = require('async');
+var Parse = require('../db/parse');
 
 function generatePairing(round, tournament, state) {
-    state = typeof state !== 'undefined' ? state : 'pending';
+    state = typeof state !== 'undefined' ? state : 'playing';
     matches = [];
 
     var contestants = tournament.contestants.slice();
-    console.log(contestants);
     var row1 = contestants.slice(0, contestants.length / 2);
     var row2 = contestants.slice(contestants.length / 2);
-    console.log(row1);
-    console.log(row2);
+    
     if (row2.length != row1.length) {
         row2.push(null);
     }
@@ -36,7 +35,7 @@ function generatePairing(round, tournament, state) {
             match.state = 'finished';
         }
         else {
-            players = [row1[i], row2[i]];
+            match.players = [row1[i], row2[i]];
         }
 
         matches.push(match);
@@ -84,8 +83,73 @@ exports.matchEnd = function(match, db, cb) {
 
 exports.roundStart = function(tournament, db, cb) {
     var matches = generatePairing(tournament.round, tournament);
-    console.log(matches);
-    cb(null, null);
+    tournament.matches.playing = matches;
+    async.each(matches, function(item, callback) {
+        db.collection('matches').insert(item, function(err, result) {
+            if (err) {
+                callback(err);
+            }
+            else {
+                if (item.players.length > 1) {
+                    async.each(item.players, function(player, callb) {
+                        var request = {
+                            channels: ['user_' + player.id],
+                            data: {
+                                match: item._id
+                            }
+                        };
+                        console.log(request);
+                        if (player == item.players[0]) {
+                            request.data.alert = 'You are playing' + item.players[1].id + ' next!';
+                            request.data.opponent = item.players[1].id;
+                        }
+                        else {
+                            request.data.alert = 'You are playing' + item.players[0].id + ' next!';
+                            request.data.opponent = item.players[0].id;
+                        }
+                        Parse.Push.send(request).then(function() {
+                            callb();
+                        }, function (error) {
+                            callb(error);
+                        });
+                    }, function(error) {
+                        if (err) {
+                            cb({
+                                code: 500,
+                                message: err
+                            });
+                        }   
+                        else {
+                            callback();
+                        }
+                    });
+                }
+                else {
+                    callback();
+                }
+            }
+        });
+    }, function(err) {
+        if (err) {
+            cb({
+                code: 500,
+                message: err
+            });
+        }
+        else {
+            db.collection('tournaments').save(tournament, function(err, result) {
+                if (err) {
+                    cb({
+                        code: 500,
+                        message: err
+                    });
+                }   
+                else {
+                    cb();
+                }
+            });
+        }
+    });
 }
 
 exports.roundEnd = function(tournament, db, cb) {

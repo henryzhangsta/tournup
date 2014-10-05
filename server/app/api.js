@@ -53,7 +53,6 @@ exports.tournament = function(req, res, next) {
                                 raiseCustomError(res, err);
                             }
                             else {
-                                console.log(result);
                                 res.status(200);
                                 res.send({result: 'Tournament start successful.'});
                                 res.end();

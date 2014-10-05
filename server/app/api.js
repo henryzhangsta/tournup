@@ -1,5 +1,6 @@
 var Parse = require('./db/parse');
 var ObjectID = require('mongodb').ObjectID;
+var async = require('async');
 
 function raiseInvalidParametersException(res, message) {
     res.status(400);
@@ -36,18 +37,43 @@ exports.tournament = function(req, res, next) {
 
                 if (req.params.property == 'results') {
                     var results = [];
-                    for (var i in tournament.contestants) {
-                        results.push({
-                            id: tournament.contestants[i].id,
-                            score: tournament.contestants[i].scoring.score,
-                            wins: tournament.contestants[i].scoring.wins,
-                            draws: tournament.contestants[i].scoring.draws,
-                            losses: tournament.contestants[i].scoring.losses
+
+                    (new Parse.Query(Parse.User)).get(req.params.id, {
+                        success: function(obj) {
+                            user = obj;
+                            act();
+                        },
+                        error: function(err) {
+                            raiseDbError(res, 'User does not exist.');
+                        }
+                    });
+                    async.each(tournament.contestants, function(item, callback) {
+                        (new Parse.Query(Parse.User)).get(item.id, {
+                            success: function(obj) {
+                                results.push({
+                                    id: item.id,
+                                    name: obj.name,
+                                    score: item.scoring.score,
+                                    wins: item.scoring.wins,
+                                    draws: item.scoring.draws,
+                                    losses: item.scoring.losses
+                                });
+                                callback(null);
+                            },
+                            error: function(err) {
+                                callback(err);
+                            }
                         });
-                    }
-                    res.status(200);
-                    res.send(JSON.stringify(results));
-                    res.end();
+                    }, function(error) {
+                        if (error) {
+                            raiseDbError(res, error);
+                        }
+                        else {
+                            res.status(200);
+                            res.send(JSON.stringify(results));
+                            res.end();
+                        }
+                    });
                 }
                 else {
                     res.status(200);

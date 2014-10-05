@@ -25,6 +25,20 @@ exports.oauth = function(req, res, next) {
             method: 'POST',
             form: data
         }, function(error, response, body) {
+            body = JSON.parse(body);
+            body._id = body.user.id;
+            req.mongo.collection('venmo').save(body, function(error, result) {
+                if (error) {
+                    res.status(500);
+                    res.send(JSON.stringify({message: 'Unable to save OAuth token.'}));
+                    res.end();
+                }
+                else {
+                    res.status(200);
+                    res.send(JSON.stringify({venmo_id: body._id}));
+                    res.end();
+                }
+            });
             console.log(body);
         });
     }

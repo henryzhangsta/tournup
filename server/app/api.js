@@ -53,7 +53,6 @@ exports.tournament = function(req, res, next) {
                                 raiseCustomError(res, err);
                             }
                             else {
-                                console.log(result);
                                 res.status(200);
                                 res.send({result: 'Tournament start successful.'});
                                 res.end();
@@ -69,23 +68,25 @@ exports.tournament = function(req, res, next) {
                                     return;
                                 }
                                 
+                                user = {
+                                    id: data.user,
+                                    registration_time: (new Date()).toJSON(),
+                                    paid: false,
+                                    transaction: null,
+                                    status: 'pending',
+                                    scoring: {
+                                        score: 0,
+                                        wins: 0,
+                                        draws: 0,
+                                        losses: 0
+                                    }
+                                };
                                 if (tournament.paid) {
-                                    tournament.contestants.push({
-                                        id: data.user,
-                                        registration_time: (new Date()).toJSON(),
-                                        paid: false,
-                                        transaction: null,
-                                        status: 'pending'
-                                    });
+                                    tournament.contestants.push(user);
                                 }
                                 else {
-                                    tournament.contestants.push({
-                                        id: data.user,
-                                        registration_time: (new Date()).toJSON(),
-                                        paid: false,
-                                        transaction: null,
-                                        status: 'confirmed'
-                                    });
+                                    user.status = 'confirmed';
+                                    tournament.contestants.push(user);
                                 }
                                 req.mongo.collection('tournaments').save(tournament, function(err, result){
                                     if (err) {
@@ -123,6 +124,7 @@ exports.tournament = function(req, res, next) {
                                 tournament.paid = data.paid;
                                 tournament.max_contestants = data.max_contestants;
                                 tournament.entry_cost = data.entry_cost;
+                                tournament.state = 'pending';
                                 tournament.contestants = [];
 
                                 req.mongo.collection('tournaments').insert(tournament, function(err, result){
@@ -197,10 +199,40 @@ exports.match = function(req, res, next) {
                     raiseInvalidParametersException(res, 'ID field is not allowed.');
                 }
                 break;
-            case 'UPDATE':
+            case 'PUT':
                 if (!req.params.id) {
                     raiseInvalidParametersException(res, 'ID field is required.');
                 }
+                data = req.body;
+                if (!data.winner || !data.result) {
+                    raiseInvalidParametersException(res, 'Request is missing one or more required parameters');
+                    return;
+                }
+                if (data.result == 'draw' || match.players.filter(function(item) {return item == data.winner}).length == 1) {
+                    raiseInvalidParametersException(res, 'Invalid result.');
+                    return;
+                }
+                var tournament = req.mongo.collection('tournaments').findOne(match.tournament_id, function(err, item) {
+                    if (err) {
+                        raiseDbError(res, 'Tournament does not exist.');
+                    }
+                    else {
+                        match.winner = data.winner;
+                        match.result = data.result;
+                        match.state = 'finished';
+                        require('./formats/' + tournament.format).matchEnd(match, req.mongo, function(err, result) {
+                            if (err) {
+                                raiseCustomError(res, err);
+                            }
+                            else {
+                                res.status(200);
+                                res.send({message: 'Result saved.'});
+                                res.end();
+                            }
+                        });
+                    }
+                });
+
                 break;
             case 'DELETE':
                 if (!req.params.id) {
@@ -211,7 +243,11 @@ exports.match = function(req, res, next) {
     }
 
     if (req.params.id) {
-        req.mongo.collection('matches').findOne({_id: req.params.id}, function(err, item) {
+        if (req.params.id.length < 12) {
+            raiseInvalidParametersException(res, 'Invalid ID.');
+            return;
+        }
+        req.mongo.collection('matches').findOne({_id: ObjectID.createFromHexString(req.params.id)}, function(err, item) {
             if (err == null && item) {
                 match = item;
                 act();

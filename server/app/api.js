@@ -58,11 +58,11 @@ exports.tournament = function(req, res, next) {
                     }
                     else if (req.params.property == 'add') {
                         data = req.body;
-                        (new Parse.Query(Parse.User)).get(data.owner, {
+                        (new Parse.Query(Parse.User)).get(data.user, {
                             success: function(obj) {
                                 if (tournament.paid) {
                                     tournament.contestants.push({
-                                        _id: ObjectID().createFromHexString(data.owner),
+                                        _id: ObjectID().createFromHexString(data.user),
                                         registration_time: (new Date()).toJSON(),
                                         paid: '0.00',
                                         transaction: null,
@@ -71,7 +71,7 @@ exports.tournament = function(req, res, next) {
                                 }
                                 else {
                                     tournament.contestants.push({
-                                        _id: ObjectID().createFromHexString(data.owner),
+                                        _id: ObjectID().createFromHexString(data.user),
                                         registration_time: (new Date()).toJSON(),
                                         paid: '0.00',
                                         transaction: null,

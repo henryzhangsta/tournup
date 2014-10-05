@@ -1,5 +1,6 @@
 var async = require('async');
 
+// Code to start and work on tournament flow.
 exports.start = function(tournament, db, cb) {
     if (tournament.contestants.length <= 1) {
         cb({
@@ -55,7 +56,17 @@ exports.start = function(tournament, db, cb) {
             tournament.num_rounds = tournament.contestants.length - (tournament.contestants.length % 2 == 1 ? 0 : 1);
             tournament.round = 1;
 
-            db.collection('tournaments').save(tournament, cb);
+            db.collection('tournaments').save(tournament, function(err, reuslt) {
+                if (err) {
+                    cb({
+                        code: 500,
+                        message: 'Cannot start this tournament.'
+                    });
+                };
+                else {
+                    roundStart(tournament, db, cb);
+                }
+            });
         }
     });
 }
@@ -69,7 +80,9 @@ exports.matchEnd = function(match, db, cb) {
 }
 
 exports.roundStart = function(tournament, db, cb) {
+    for (var i = 0; i < tournament.matches.waiting; ++i) {
 
+    }
 }
 
 exports.roundEnd = function(tournament, db, cb) {
@@ -79,3 +92,5 @@ exports.roundEnd = function(tournament, db, cb) {
 exports.end = function(tournament, db, cb) {
 
 }
+
+// Tournament result reporting

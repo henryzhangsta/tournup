@@ -33,7 +33,7 @@ registerApiCall('/venmo/webhook', venmo.webhook);
 
 http.use(function(req, res, next) {
     res.status(400);
-    res.send('API endpoint not found.');
+    res.send(JSON.stringify({message: 'API endpoint not found.'}));
     res.end();
 });
 

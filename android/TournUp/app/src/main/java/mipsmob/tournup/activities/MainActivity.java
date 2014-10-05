@@ -10,53 +10,68 @@ import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.model.GraphUser;
 import com.parse.LogInCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParsePush;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import mipsmob.tournup.R;
 
 public class MainActivity extends BaseActivity {
+
+    private static MainActivity instance;
+
+    public static void finishActivity() {
+        if (instance != null) {
+            instance.finish();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        instance = this;
+
         TextView loggingIn = (TextView) findViewById(R.id.logging_in);
         loggingIn.setTypeface(Typeface.createFromAsset(getAssets(), "onramp.ttf"));
 
-        Parse.initialize(this, "22d6Ninlt3Gcjv4fXMljncmHsboYlnCx5KkMIWt8", "2udREdDAjBRKrOcAEQAEJWvqBYDaDDVzjmPHOlbA");
-        ParseFacebookUtils.initialize("358751534281138");
-
-        ParseFacebookUtils.logIn(this, new LogInCallback() {
+        ParsePush.subscribeInBackground("user_" + ParseUser.getCurrentUser().getObjectId(), new SaveCallback() {
             @Override
-            public void done(final ParseUser parseUser, ParseException e) {
-                if (parseUser != null) {
-                    if (parseUser.isNew()) {
-                        Request.newMeRequest(ParseFacebookUtils.getSession(), new Request.GraphUserCallback() {
-                            @Override
-                            public void onCompleted(GraphUser user, Response response) {
-                                parseUser.put("name", user.getFirstName() + " " + user.getLastName());
-                                parseUser.saveInBackground();
+            public void done(ParseException e) {
+                if (e != null) {
+                    e.printStackTrace();
+                    Toast.makeText(getBaseContext(), "Something went wrong with push notifications, please try again", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    ParseFacebookUtils.initialize("358751534281138");
+                    ParseFacebookUtils.logIn(MainActivity.this, new LogInCallback() {
+                        @Override
+                        public void done(final ParseUser parseUser, ParseException e) {
+                            if (parseUser != null) {
+                                Request.newMeRequest(ParseFacebookUtils.getSession(), new Request.GraphUserCallback() {
+                                    @Override
+                                    public void onCompleted(GraphUser user, Response response) {
+                                        parseUser.put("name", user.getFirstName() + " " + user.getLastName());
+                                        parseUser.saveInBackground();
 
-                                Toast.makeText(getBaseContext(), "Successfully signed in with Facebook", Toast.LENGTH_SHORT).show();
+                                        if (parseUser.isNew()) {
+                                            Toast.makeText(getBaseContext(), "Successfully signed in with Facebook", Toast.LENGTH_SHORT).show();
+                                        }
 
-                                Intent i = new Intent(getBaseContext(), TitleActivity.class);
-                                startActivity(i);
+                                        Intent i = new Intent(getBaseContext(), TitleActivity.class);
+                                        startActivity(i);
+                                        finish();
+                                    }
+                                }).executeAsync();
+                            } else {
+                                Toast.makeText(getBaseContext(), "Could not log into Facebook, now exiting...", Toast.LENGTH_SHORT).show();
                                 finish();
                             }
-                        }).executeAsync();
-
-                    } else {
-                        Intent i = new Intent(getBaseContext(), TitleActivity.class);
-                        startActivity(i);
-                        finish();
-                    }
-                } else {
-                    Toast.makeText(getBaseContext(), "Could not log into Facebook, now exiting...", Toast.LENGTH_SHORT).show();
-                    finish();
+                        }
+                    });
                 }
             }
         });

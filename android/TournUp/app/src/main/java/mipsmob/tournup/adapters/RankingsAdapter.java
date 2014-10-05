@@ -9,23 +9,26 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import mipsmob.tournup.R;
+import mipsmob.tournup.models.ResultUser;
 
 public class RankingsAdapter extends BaseAdapter {
 
     private Context context;
+    private ResultUser[] results;
 
-    public RankingsAdapter(Context context) {
+    public RankingsAdapter(Context context, ResultUser[] results) {
         this.context = context;
+        this.results = results;
     }
 
     @Override
     public int getCount() {
-        return 0;
+        return results.length;
     }
 
     @Override
-    public Object getItem(int i) {
-        return null;
+    public ResultUser getItem(int i) {
+        return results[i];
     }
 
     @Override
@@ -35,12 +38,14 @@ public class RankingsAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View convertView, ViewGroup parent) {
+        ResultUser user = getItem(i);
+
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.rankings_row, parent, false);
         }
 
         TextView number = (TextView) convertView.findViewById(R.id.number);
-        TextView name = (TextView) convertView.findViewById(R.id.name);
+        TextView name = (TextView) convertView.findViewById(R.id.ranking_name);
         TextView score = (TextView) convertView.findViewById(R.id.score);
 
         Typeface typeface = Typeface.createFromAsset(context.getAssets(), "onramp.ttf");
@@ -49,7 +54,10 @@ public class RankingsAdapter extends BaseAdapter {
         name.setTypeface(typeface);
         score.setTypeface(typeface);
 
-        number.setText(i + "");
+        number.setText((i+1) + "");
+        name.setText(user.id);
+        System.out.println(user.score);
+//        score.setText(user.score);
 
         return convertView;
     }

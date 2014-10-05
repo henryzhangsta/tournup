@@ -17,7 +17,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:contentDescription="@string/content_desc"
-        android:background="@drawable/se_button" />
+        android:background="@drawable/single_elim_button_up_grayscale" />
 
     <ImageButton
         android:id="@+id/round_robin"
@@ -35,6 +35,6 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:contentDescription="@string/content_desc"
-        android:background="@drawable/swiss" />
+        android:background="@drawable/swiss_button_up_grayscale" />
 
 </LinearLayout>

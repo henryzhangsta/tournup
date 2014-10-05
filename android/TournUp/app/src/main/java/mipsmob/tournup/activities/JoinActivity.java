@@ -7,8 +7,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import mipsmob.tournup.R;
+import mipsmob.tournup.controllers.TournamentController;
+import mipsmob.tournup.models.Tournament;
+import mipsmob.tournup.utilities.Callback;
 
 public class JoinActivity extends BaseActivity {
 
@@ -21,7 +25,7 @@ public class JoinActivity extends BaseActivity {
             getActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        EditText url = (EditText) findViewById(R.id.url);
+        final EditText url = (EditText) findViewById(R.id.url);
         ImageButton go = (ImageButton) findViewById(R.id.go);
 
         url.setTypeface(Typeface.createFromAsset(getAssets(), "onramp.ttf"));
@@ -29,9 +33,19 @@ public class JoinActivity extends BaseActivity {
         go.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: Show tournament info.
-                Intent i = new Intent(getBaseContext(), TournamentInfoActivity.class);
-                startActivity(i);
+                TournamentController.getInstance(JoinActivity.this).getTournament(url.getText().toString(), new Callback() {
+                    @Override
+                    public void onDataRetrieved(Object data) {
+                        TournamentInfoActivity.staticTournament = (Tournament) data;
+                        Intent i = new Intent(getBaseContext(), TournamentInfoActivity.class);
+                        startActivity(i);
+                    }
+
+                    @Override
+                    public void onRetrievalFailed() {
+                        Toast.makeText(getBaseContext(), "Not a valid tournament", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
     }

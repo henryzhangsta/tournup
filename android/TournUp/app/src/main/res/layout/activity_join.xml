@@ -29,7 +29,7 @@
     <ImageButton
         android:id="@+id/go"
         android:layout_width="150dp"
-        android:layout_height="50dp"
+        android:layout_height="64dp"
         android:contentDescription="@string/content_desc"
         android:background="@drawable/go_button" />
 

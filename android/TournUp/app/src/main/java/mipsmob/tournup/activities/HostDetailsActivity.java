@@ -12,8 +12,6 @@ import android.widget.Toast;
 
 import com.parse.ParseUser;
 
-import java.util.Date;
-
 import mipsmob.tournup.R;
 import mipsmob.tournup.controllers.TournamentController;
 import mipsmob.tournup.models.Tournament;
@@ -67,7 +65,6 @@ public class HostDetailsActivity extends BaseActivity {
                     final Tournament tournament = new Tournament(
                             name.getText().toString(),
                             format,
-                            new Date(),
                             location.getText().toString(),
                             ParseUser.getCurrentUser(),
                             entryFee.getText().toString(),
@@ -79,9 +76,14 @@ public class HostDetailsActivity extends BaseActivity {
                         @Override
                         public void onDataRetrieved(Object data) {
                             tournament.setId((String) data);
+                            ParseUser.getCurrentUser().put("curr_tournament", tournament.getId());
+                            ParseUser.getCurrentUser().saveInBackground();
+                            MainActivity.finishActivity();
+
                             Toast.makeText(getBaseContext(), "Tournament successfully created!", Toast.LENGTH_SHORT).show();
 
-                            Intent i = new Intent(getBaseContext(), WaitingScreenActivity.class);
+                            Intent i = new Intent(getBaseContext(), ShareActivity.class);
+                            i.putExtra("share_link", tournament.getId());
                             startActivity(i);
                             finish();
                         }

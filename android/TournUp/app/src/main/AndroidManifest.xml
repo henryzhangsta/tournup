@@ -5,16 +5,32 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <permission
+        android:name="mipsmob.tournup.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="mipsmob.tournup.permission.C2D_MESSAGE" />
 
     <uses-feature
         android:name="android.hardware.nfc"
         android:required="true" />
 
     <application
+        android:name=".application.CoreApplication"
         android:allowBackup="true"
-        android:icon="@drawable/logo"
+        android:icon="@drawable/launcher_icon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        <meta-data
+            android:name="com.parse.push.notification_icon"
+            android:resource="@drawable/notification" />
+
         <service android:name="com.parse.PushService" />
 
         <receiver android:name="com.parse.ParseBroadcastReceiver" >
@@ -34,7 +50,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name="com.parse.ParsePushBroadcastReceiver"
+            android:name=".receivers.PushReceiver"
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />
@@ -96,6 +112,7 @@
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen" >
             <intent-filter>
@@ -108,21 +125,40 @@
             android:name=".activities.TournamentInfoActivity"
             android:label="@string/title_activity_tournament_info"
             android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="huadianz.me"
+                    android:scheme="http" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".activities.HostDetailsActivity"
             android:label="@string/title_activity_host_details"
             android:parentActivityName=".activities.HostActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" >
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="mipsmob.tournup.activities.HostActivity" />
         </activity>
         <activity
-            android:name=".activities.WaitingScreenActivity"
+            android:name=".activities.ResultsActivity"
             android:label="@string/title_activity_waiting_screen"
             android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".activities.ShareActivity"
+            android:label="@string/title_activity_share"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
+        <activity
+            android:name=".activities.WaitingActivity"
+            android:label="@string/title_activity_waiting" >
         </activity>
     </application>
 

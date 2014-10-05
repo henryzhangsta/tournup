@@ -5,7 +5,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
@@ -15,22 +15,12 @@
 
         <TextView
             android:id="@+id/tourny_name"
-            android:text="Cal Smash"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="60sp" />
 
         <TextView
-            android:id="@+id/tourny_time"
-            android:text="Time: 1:00P"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:textSize="40sp" />
-
-        <TextView
             android:id="@+id/tourny_loc"
-            android:text="Loc: Memorial Stadium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
@@ -38,7 +28,6 @@
 
         <TextView
             android:id="@+id/tourny_host"
-            android:text="Host: Huadian"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
@@ -46,7 +35,6 @@
 
         <TextView
             android:id="@+id/tourny_format"
-            android:text="Format: Round Robin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
@@ -54,7 +42,13 @@
 
         <TextView
             android:id="@+id/tourny_people"
-            android:text="People: 6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textSize="40sp" />
+
+        <TextView
+            android:id="@+id/entry_fee"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"

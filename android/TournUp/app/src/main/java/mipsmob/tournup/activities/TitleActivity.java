@@ -9,6 +9,8 @@ import android.provider.Settings;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.parse.ParseUser;
+
 import mipsmob.tournup.R;
 
 
@@ -64,6 +66,23 @@ public class TitleActivity extends BaseActivity {
                 startActivity(i);
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        String currTourny = ParseUser.getCurrentUser().getString("curr_tournament");
+        if (ParseUser.getCurrentUser().getString("curr_match") != null) {
+            Intent i = new Intent(this, MatchActivity.class);
+            startActivity(i);
+            finish();
+        } else if (currTourny != null) {
+            Intent i = new Intent(this, WaitingActivity.class);
+            i.putExtra("id", currTourny);
+            startActivity(i);
+            finish();
+        }
     }
 
 }

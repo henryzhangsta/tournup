@@ -22,7 +22,9 @@
     <string name="tournament_name">Tournament Name</string>
     <string name="money">$</string>
     <string name="percent">%</string>
-    <string name="title_activity_waiting_screen">Awaiting Next Round</string>
-    <string name="current_rankings">Current Rankings</string>
+    <string name="title_activity_waiting_screen">Results</string>
+    <string name="current_rankings">Rankings</string>
+    <string name="title_activity_share">Share</string>
+    <string name="title_activity_waiting">TournUp</string>
 
 </resources>

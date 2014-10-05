@@ -1,6 +1,6 @@
 var async = require('async');
 var Parse = require('../db/parse');
-var push = require('./push/push');
+var push = require('../push/push');
 
 function generatePairing(round, tournament, state) {
     state = typeof state !== 'undefined' ? state : 'playing';

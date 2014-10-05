@@ -1,5 +1,6 @@
 var async = require('async');
 var Parse = require('../db/parse');
+var push = require('./push/push')
 
 function generatePairing(tournament) {
     matches = [];
@@ -153,11 +154,11 @@ exports.roundStart = function(tournament, db, cb) {
                         };
                         console.log(request);
                         if (player == item.players[0]) {
-                            request.data.alert = 'You are playing' + item.players[1] + ' next!';
+                            request.data.alert = 'You are playing ' + item.players[1] + ' next!';
                             request.data.opponent = item.players[1];
                         }
                         else {
-                            request.data.alert = 'You are playing' + item.players[0] + ' next!';
+                            request.data.alert = 'You are playing ' + item.players[0] + ' next!';
                             request.data.opponent = item.players[0];
                         }
                         Parse.Push.send(request).then(function() {
@@ -240,20 +241,7 @@ exports.end = function(tournament, db, cb) {
             });
         }   
         else {
-            Parse.Push.send({
-                channels: ['tournament_' + tournament._id],
-                data: {
-                    alert: 'Tournament is complete. Results are ready!',
-                    tournament_id: tournament._id
-                }
-            }).then(function(result) {
-                cb(null, result);
-            }, function(error) {
-                cb({
-                    code: 500,
-                    message: error
-                });
-            });
+            push.sendResults(tournament, cb);
         }
     });
 }

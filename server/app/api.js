@@ -378,6 +378,7 @@ exports.payment = function(req, res, next) {
                                                 tournament.contestants[i].paid = true;
                                                 tournament.contestants[i].status = 'confirmed';
                                                 tournament.contestants[i].transaction = transaction._id;
+                                                tournament.contestants[i].venmo_id = transaction.venmo_id;
                                                 
                                                 req.mongo.collection('tournaments').save(tournament, function (err, result) {
                                                     if (err) {
@@ -403,6 +404,7 @@ exports.payment = function(req, res, next) {
                                             user_id: data.user_id,
                                             payment_id: data.payment_id,
                                             tournament_id: data.tournament_id,
+                                            venmo_id: null,
                                             confirmed: false
                                         }, function(err, result) {
                                             res.status(200);

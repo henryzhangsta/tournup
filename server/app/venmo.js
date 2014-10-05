@@ -16,9 +16,9 @@ exports.webhook = function(req, res, next) {
 exports.oauth = function(req, res, next) {
     if (req.query.code) {
         data = {
-            code: req.query.code;
-            client_id: '2003';
-            client_secret: 'SECRET';
+            code: req.query.code,
+            client_id: '2003',
+            client_secret: 'SECRET'
         };
         request({
             url: 'https://api.venmo.com/v1/oauth/access_token',

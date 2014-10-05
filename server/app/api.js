@@ -33,6 +33,7 @@ exports.tournament = function(req, res, next) {
                 if (!req.params.id) {
                     raiseInvalidParametersException(res, 'ID field is required.');
                 }
+
                 res.status(200);
                 res.send(JSON.stringify(tournament));
                 res.end();
@@ -157,6 +158,7 @@ exports.tournament = function(req, res, next) {
     if (req.params.id) {
         if (req.params.id.length < 12) {
             raiseInvalidParametersException(res, 'Invalid ID.');
+            return;
         }
         req.mongo.collection('tournaments').findOne({_id: ObjectID.createFromHexString(req.params.id)}, function(err, item) {
             if (err == null && item) {

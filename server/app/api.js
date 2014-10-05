@@ -38,21 +38,12 @@ exports.tournament = function(req, res, next) {
                 if (req.params.property == 'results') {
                     var results = [];
 
-                    (new Parse.Query(Parse.User)).get(req.params.id, {
-                        success: function(obj) {
-                            user = obj;
-                            act();
-                        },
-                        error: function(err) {
-                            raiseDbError(res, 'User does not exist.');
-                        }
-                    });
                     async.each(tournament.contestants, function(item, callback) {
                         (new Parse.Query(Parse.User)).get(item.id, {
                             success: function(obj) {
                                 results.push({
                                     id: item.id,
-                                    name: obj.name,
+                                    name: obj.attributes.name,
                                     score: item.scoring.score,
                                     wins: item.scoring.wins,
                                     draws: item.scoring.draws,

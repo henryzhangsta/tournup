@@ -20,7 +20,7 @@ exports.sendResults = function(tournament, callback) {
 
 exports.sendMatchNotification = function(match, callback) {
     async.each(match.players, function(player, callb) {
-        if (opponent == match.players[0]) {
+        if (player == match.players[0]) {
             opponent = match.players[1];
         }
         else {
@@ -57,7 +57,7 @@ exports.sendMatchNotification = function(match, callback) {
                 code: 500,
                 message: err
             });
-        }   
+        }
         else {
             callback(null, match._id);
         }

@@ -127,7 +127,7 @@ exports.matchEnd = function(tournament, match, db, cb) {
                     else {
                         cb(null, result);
                     }
-                }
+                });
             }
         }
     })   

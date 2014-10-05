@@ -208,19 +208,22 @@ exports.match = function(req, res, next) {
                     raiseInvalidParametersException(res, 'Request is missing one or more required parameters');
                     return;
                 }
-                if (data.result == 'draw' || match.players.filter(function(item) {return item == data.winner}).length == 1) {
+                if (data.result != 'draw' && match.players.filter(function(item) {return item == data.winner}).length == 0) {
+                    console.log(match.players);
                     raiseInvalidParametersException(res, 'Invalid result.');
                     return;
                 }
-                var tournament = req.mongo.collection('tournaments').findOne(match.tournament_id, function(err, item) {
+                var tournament;
+                req.mongo.collection('tournaments').findOne(match.tournament_id, function(err, item) {
                     if (err) {
                         raiseDbError(res, 'Tournament does not exist.');
                     }
                     else {
+                        tournament = item;
                         match.winner = data.winner;
                         match.result = data.result;
                         match.state = 'finished';
-                        require('./formats/' + tournament.format).matchEnd(match, req.mongo, function(err, result) {
+                        require('./formats/' + tournament.format).matchEnd(tournament, match, req.mongo, function(err, result) {
                             if (err) {
                                 raiseCustomError(res, err);
                             }

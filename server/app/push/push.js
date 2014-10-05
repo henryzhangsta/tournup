@@ -29,12 +29,11 @@ exports.sendMatchNotification = function(match, callback) {
 
         (new Parse.Query(Parse.User)).get(opponent, {
             success: function(obj) {
-                opponent = obj.attributes.name;
                 var request = {
                     channels: ['user_' + player],
                     data: {
                         match: match._id,
-                        alert: 'You are playing ' + opponent + ' next!',
+                        alert: 'You are playing ' + obj.attributes.name + ' next!',
                         opponent: opponent
                     }
                 };

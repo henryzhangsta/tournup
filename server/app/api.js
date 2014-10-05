@@ -221,7 +221,7 @@ exports.match = function(req, res, next) {
                     raiseInvalidParametersException(res, 'ID field is required.');
                 }
                 data = req.body;
-                if (!data.winner || !data.result) {
+                if (data.winner == null || !data.result) {
                     raiseInvalidParametersException(res, 'Request is missing one or more required parameters');
                     return;
                 }

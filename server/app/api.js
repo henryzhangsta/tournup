@@ -65,18 +65,18 @@ exports.tournament = function(req, res, next) {
                             success: function(obj) {
                                 if (tournament.paid) {
                                     tournament.contestants.push({
-                                        _id: ObjectID().createFromHexString(data.user),
+                                        id: data.user,
                                         registration_time: (new Date()).toJSON(),
-                                        paid: '0.00',
+                                        paid: false,
                                         transaction: null,
                                         status: 'pending'
                                     });
                                 }
                                 else {
                                     tournament.contestants.push({
-                                        _id: ObjectID().createFromHexString(data.user),
+                                        id: data.user,
                                         registration_time: (new Date()).toJSON(),
-                                        paid: '0.00',
+                                        paid: false,
                                         transaction: null,
                                         status: 'confirmed'
                                     });
@@ -274,7 +274,51 @@ exports.payment = function(req, res, next) {
                 raiseInvalidParametersException(res, 'ID field is not allowed.');
             }
             data = req.body;
-
+            if (!data.payment_id || !data.tournament_id || !data.user_id) {
+                raiseInvalidParametersException(res, 'Request is missing one or more required parameters');
+                return;
+            }
+            (new Parse.Query(Parse.User)).get(req.params.id, {
+                success: function(obj) {
+                    user = obj;
+                    req.mongo.collection('tournaments').findOne({_id: ObjectID.createFromHexString(data.tournament_id)}, function(err, item) {
+                        if (err == null && item) {
+                            tournament = item;
+                            req.mongo.collection('transactions').findOne({payment_id: data.payment_id}, function(err, transaction) {
+                                if (err) {
+                                    raiseDbError(res, err);
+                                }
+                                else {
+                                    if (transaction.confirmed) {
+                                        for (var i in tournament.contestants) {
+                                            if (tournament.contestants[i].id == data.user_id) {
+                                                tournament.contestants[i].paid = true;
+                                                tournament.contestants[i].status = 'confirmed';
+                                                tournament.contestants[i].transaction = transaction._id;
+                                                
+                                                res.status(200);
+                                                res.send(res, JSON.stringify({
+                                                    transaction_id: transaction._id,
+                                                    status: 'confirmed'
+                                                }));
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                        else if (err) {
+                            raiseDbError(res, err);
+                        }
+                        else {
+                            raiseInvalidParametersException(res, 'Tournament does not exist.');
+                        }
+                    });
+                },
+                error: function(err) {
+                    raiseDbError(res, 'User does not exist.');
+                }
+            });
             break;
         case 'UPDATE':
             if (!req.params.id) {

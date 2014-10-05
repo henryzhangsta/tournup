@@ -87,7 +87,7 @@ exports.tournament = function(req, res, next) {
                                     }
                                     else {
                                         res.status(200);
-                                        res.send({message: 'Adding '});
+                                        res.send({message: 'Successfully added user to tournament.'});
                                         res.end();
                                     }
                                 });
@@ -273,6 +273,8 @@ exports.payment = function(req, res, next) {
             if (req.params.id) {
                 raiseInvalidParametersException(res, 'ID field is not allowed.');
             }
+            data = req.body;
+
             break;
         case 'UPDATE':
             if (!req.params.id) {

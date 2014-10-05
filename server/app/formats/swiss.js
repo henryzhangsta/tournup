@@ -117,7 +117,7 @@ exports.matchEnd = function(tournament, match, db, cb) {
                 exports.roundEnd(tournament, db, cb);
             }
             else {
-                db.collection('tournaments').save(tournament, function(err, result)){
+                db.collection('tournaments').save(tournament, function(err, result){
                     if (err) {
                         cb({
                             code: 500,
@@ -127,7 +127,7 @@ exports.matchEnd = function(tournament, match, db, cb) {
                     else {
                         cb(null, result);
                     }
-                }
+                });
             }
         }
     })   

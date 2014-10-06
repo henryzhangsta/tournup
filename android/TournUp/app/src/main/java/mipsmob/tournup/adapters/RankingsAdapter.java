@@ -55,9 +55,8 @@ public class RankingsAdapter extends BaseAdapter {
         score.setTypeface(typeface);
 
         number.setText((i+1) + "");
-        name.setText(user.id);
-        System.out.println(user.score);
-//        score.setText(user.score);
+        name.setText(user.name);
+        score.setText(user.score + "");
 
         return convertView;
     }

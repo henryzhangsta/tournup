@@ -45,7 +45,10 @@ public class HostActivity extends BaseActivity {
         swiss.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getBaseContext(), "Coming Soon!", Toast.LENGTH_SHORT).show();
+                intent.putExtra("format", "swiss");
+                startActivity(intent);
+                finish();
+
             }
         });
     }

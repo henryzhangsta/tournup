@@ -41,6 +41,7 @@ public class TournamentController {
         public int max_contestants;
         public String entry_cost;
         public List<Object> contestants;
+        public String venmo_id;
     }
 
     private class User {
@@ -133,7 +134,7 @@ public class TournamentController {
                                 @Override
                                 public void done(ParseUser parseUser, ParseException e) {
                                     if (e == null) {
-                                        final Tournament tourny = new Tournament(JSONTourny.name, JSONTourny.format, JSONTourny.location, parseUser, JSONTourny.entry_cost, JSONTourny.paid, JSONTourny.max_contestants);
+                                        final Tournament tourny = new Tournament(JSONTourny.name, JSONTourny.format, JSONTourny.location, parseUser, JSONTourny.entry_cost, JSONTourny.paid, JSONTourny.max_contestants, JSONTourny.venmo_id);
                                         tourny.setId(JSONTourny._id);
                                         ((Activity) context).runOnUiThread(new Runnable() {
                                             @Override
@@ -288,6 +289,10 @@ public class TournamentController {
         }.start();
     }
 
+    public void payout() {
+
+    }
+
     private class CreationThread extends Thread {
 
         private Tournament tourny;
@@ -328,16 +333,7 @@ public class TournamentController {
                     ((Activity) context).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            ParsePush.subscribeInBackground("host_" + tourny.getId(), new SaveCallback() {
-                                @Override
-                                public void done(ParseException e) {
-                                    if (e != null) {
-                                        callback.onRetrievalFailed();
-                                    } else {
-                                        callback.onDataRetrieved(response);
-                                    }
-                                }
-                            });
+                            callback.onDataRetrieved(response);
                         }
                     });
                 }

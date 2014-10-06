@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.ParsePush;
 import com.parse.ParseUser;
 
 import mipsmob.tournup.R;
@@ -69,13 +70,15 @@ public class HostDetailsActivity extends BaseActivity {
                             ParseUser.getCurrentUser(),
                             entryFee.getText().toString(),
                             Integer.parseInt(entryFee.getText().toString()) != 0,
-                            Integer.parseInt(maxPeople.getText().toString())
+                            Integer.parseInt(maxPeople.getText().toString()),
+                            null
                     );
 
                     TournamentController.getInstance(HostDetailsActivity.this).createTournament(tournament, new Callback() {
                         @Override
                         public void onDataRetrieved(Object data) {
                             tournament.setId((String) data);
+                            ParsePush.subscribeInBackground("host_" + tournament.getId());
                             ParseUser.getCurrentUser().put("curr_tournament", tournament.getId());
                             ParseUser.getCurrentUser().saveInBackground();
                             MainActivity.finishActivity();

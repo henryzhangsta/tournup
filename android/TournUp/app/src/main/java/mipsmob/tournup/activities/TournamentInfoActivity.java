@@ -133,17 +133,18 @@ public class TournamentInfoActivity extends BaseActivity {
                     public void onDataRetrieved(Object data) {
                         if (!tournament.getCost().equals("null") && Integer.parseInt(tournament.getCost()) > 0) {
                             try {
-                                Intent venmoIntent = VenmoLibrary.openVenmoPayment("2003", "TournUp", "Huadian-Zhang", "5", "Tournament Entry Fee", "pay");
+                                Intent venmoIntent = VenmoLibrary.openVenmoPayment("2003", "TournUp", tournament.venmoId, tournament.getCost(), "Tournament Entry Fee", "pay");
                                 startActivityForResult(venmoIntent, VENMO_RESULT);
                             } catch (android.content.ActivityNotFoundException e) //Venmo native app not install on device, so let's instead open a mobile web version of Venmo in a WebView
                             {
                                 Intent venmoIntent = new Intent(getBaseContext(), VenmoWebViewActivity.class);
-                                String venmo_uri = VenmoLibrary.openVenmoPaymentInWebView("2003", "TournUp", "Huadian-Zhang", "5", "Tournament Entry Fee", "pay");
+                                String venmo_uri = VenmoLibrary.openVenmoPaymentInWebView("2003", "TournUp", tournament.venmoId, tournament.getCost(), "Tournament Entry Fee", "pay");
                                 venmoIntent.putExtra("url", venmo_uri);
                                 startActivityForResult(venmoIntent, VENMO_RESULT);
                             }
                         } else {
-                            Intent i = new Intent(getBaseContext(), ResultsActivity.class);
+                            Intent i = new Intent(getBaseContext(), WaitingActivity.class);
+                            i.putExtra("id", tournament.getId());
                             startActivity(i);
                             finish();
                         }

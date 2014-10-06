@@ -35,6 +35,6 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:contentDescription="@string/content_desc"
-        android:background="@drawable/swiss_button_up_grayscale" />
+        android:background="@drawable/swiss" />
 
 </LinearLayout>

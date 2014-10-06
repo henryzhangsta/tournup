@@ -13,7 +13,9 @@ public class Tournament {
     private Boolean isPaid;
     private int maxPeople;
 
-    public Tournament(String name, String type, String location, ParseUser host, String cost, Boolean isPaid, int maxPeople) {
+    public String venmoId;
+
+    public Tournament(String name, String type, String location, ParseUser host, String cost, Boolean isPaid, int maxPeople, String venmoId) {
         this.name = name;
         this.type = type;
         this.location = location;
@@ -21,6 +23,7 @@ public class Tournament {
         this.cost = cost;
         this.isPaid = isPaid;
         this.maxPeople = maxPeople;
+        this.venmoId = venmoId;
     }
 
     public void setId(String id) {
